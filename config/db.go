@@ -8,9 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Server struct {
-	DB *gorm.DB
-}
 type Accounts struct {
 	gorm.Model
 	Name     string

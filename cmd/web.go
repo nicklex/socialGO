@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
 	"socialapp/config"
 
@@ -11,42 +12,67 @@ import (
 )
 
 type Account struct {
-	Name     string
-	Email    string
-	Password string
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+type Server struct {
+	DB *gorm.DB
 }
 
-func (acc *Account) NewAcc(w http.ResponseWriter, r *http.Request) (*Account, error) {
+func (srv *Server) NewAcc(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Акк создан", r.PostFormValue("name"))
 	db, err := config.NewDB()
 	if err != nil {
 		panic(err)
 	}
 
-	srv := &config.Server{
+	srv = &Server{
 		DB: db,
 	}
 	ctx := context.Background()
-	acc = &Account{
+	acc := &Account{
 		Name:     r.PostFormValue("name"),
 		Email:    r.PostFormValue("email"),
 		Password: r.PostFormValue("password"),
 	}
 	err = gorm.G[Account](srv.DB).Create(ctx, acc)
+
 	//err := gorm.G[Account](srv.DB).Create(ctx, acc)
 	//err := config.Db(&gorm.DB{}).Create(acc)
 	if err != nil {
 		fmt.Println("Ошибка при создании аккаунта:", err)
 		http.Error(w, "Ошибка при создании аккаунта", http.StatusInternalServerError)
-		return nil, err
+		return
 	}
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
-	return acc, nil
+
 	// return &Account{
 	// 	Name:     r.PostFormValue("name"),
 	// 	Email:    r.PostFormValue("email"),
 	// 	Password: r.PostFormValue("password"),
 	// }
+}
+func (srv *Server) Auth(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	db, err := config.NewDB()
+	if err != nil {
+		panic(err)
+	}
+
+	srv = &Server{
+		DB: db,
+	}
+	// Get the first record ordered by primary key
+	//acc, err := gorm.G[config.Accounts](srv.DB).Where("name = ?", r.PostFormValue("name")).First(ctx)
+	acc, err := gorm.G[Account](srv.DB).Where("email = ? and password = ?", r.FormValue("email"), r.FormValue("password")).First(ctx)
+
+	if err != nil {
+		fmt.Println(err, acc)
+		io.WriteString(w, err.Error())
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {

@@ -27,8 +27,12 @@ func HandleStart() {
 		Profile(w, r)
 	})
 	r.Post("/newacc", func(w http.ResponseWriter, r *http.Request) {
-		acc := &Account{}
-		acc.NewAcc(w, r)
+		srv := &Server{}
+		srv.NewAcc(w, r)
+	})
+	r.Get("/auth", func(w http.ResponseWriter, r *http.Request) {
+		srv := &Server{}
+		srv.Auth(w, r)
 	})
 	http.ListenAndServe(":3000", r)
 }
