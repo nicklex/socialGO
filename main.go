@@ -1,6 +1,8 @@
 package main
 
-import "socialapp/cmd"
+import (
+	"socialapp/cmd"
+)
 
 func main() {
 	cmd.HandleStart()
