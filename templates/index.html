@@ -1,0 +1,34 @@
+{{define "main"}}
+{{template "header"}}
+<main class="container feed">
+        <article class="post">
+            <div class="post-header">
+                <div class="avatar"></div>
+                <div>
+                    <h4 class="username">Алексей Иванов</h4>
+                    <span class="date">2 часа назад</span>
+                </div>
+            </div>
+            <p class="post-content">Минимализм — это не отсутствие чего-либо, а идеальное количество того, что нужно.</p>
+            <div class="post-footer">
+                <button class="like-btn">❤️ 12</button>
+            </div>
+        </article>
+
+        <article class="post">
+            <div class="post-header">
+                <div class="avatar blue"></div>
+                <div>
+                    <h4 class="username">Дизайн Студия</h4>
+                    <span class="date">Вчера</span>
+                </div>
+            </div>
+            <p class="post-content">Зацените наш новый концепт для socialGO. Чистые линии и много воздуха.</p>
+            <img src="https://via.placeholder.com/600x300" alt="Post Image" class="post-img">
+            <div class="post-footer">
+                <button class="like-btn">❤️ 45</button>
+            </div>
+        </article>
+    </main>
+    {{template "footer"}}
+{{end}}

@@ -1,0 +1,16 @@
+  {{define "registrPage"}}
+{{template "header"}}
+<main class="container">
+    <div class="auth-card">
+        <h2>Регистрация socialGO</h2>
+        <form action="/newacc" method="POST">
+            <input name="name" type="text" placeholder="Имя пользователя" required>
+            <input name="email" type="email" placeholder="Email" required>
+            <input name="password" type="password" placeholder="Пароль" required>
+            <button type="submit" class="auth-btn">Зарегистрироваться</button>
+        </form>
+        <p style="font-size: 14px; color: var(--gray);">Есть аккаунт? <a href="/login" style="color: var(--accent);">Войти</a></p>
+    </div>
+</main>
+{{template "footer"}}
+{{end}}
